@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication3
+{
+    class Program
+    {
+        
+static void Main(string[] args)
+        {
+            double pi = Math.PI;
+            FileStream f = new FileStream("file.txt",FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.ReadWrite);
+            try
+            {
+                using(StreamWriter sw = new StreamWriter(f))
+                {
+                    String userinput = Console.ReadLine();
+                    if (f.Length > 1)
+                    {
+                        sw.Write(userinput);
+                        sw.Write("\r\n");
+                    }
+                    else
+                    {
+                        sw.WriteLine(userinput);
+                        sw.Write("\r\n");
+                    }
+                }
+                
+            }
+            catch(IOException ioe)
+            {
+                Console.WriteLine(ioe);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            int line;
+            using (StreamReader sr = new StreamReader("file.txt"))
+            {
+                try
+                {
+                    Console.WriteLine(sr.ReadToEnd());
+                    Console.ReadKey();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                
+            }
+        }
+    }
+}
