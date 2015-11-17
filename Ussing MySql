@@ -1,0 +1,108 @@
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication2
+{
+    class Database
+    {
+
+
+        private MySqlConnection connection;
+        
+        public void Initialize()
+        {
+            string connectionString;
+            connectionString = "datasource = localhost; port = 3306; username = xLuis; password = password; database= articles";
+
+            connection = new MySqlConnection(connectionString);
+        }
+        public bool openConnection()
+        {
+            try
+            {
+                connection.Open();
+                Console.WriteLine("Connection Opened");
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        //Close connection
+        public bool CloseConnection()
+        {
+            try
+            {
+                connection.Close();
+                Console.WriteLine("Connection is closed!");
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+        }
+        public String id;
+        public string author;
+        public string title;
+        public string body;
+        public void getData()
+        {
+         Console.WriteLine("Tell me the id");
+            id = Console.ReadLine();
+            Console.WriteLine("Tell me the author");
+            author = Console.ReadLine();
+            Console.WriteLine("Tell me the title");
+            title = Console.ReadLine();
+            Console.WriteLine("Tell me the body");
+            body = Console.ReadLine();
+
+        }
+        //Insert statement
+        public void Insert()
+        {
+            string querystring = "insert into articles (id,author,title,body) values('" + id + "','" + author + "','" + title + "','" + body + "');";
+            try
+            {
+                
+                MySqlCommand query = new MySqlCommand(querystring, connection);
+                MySqlDataReader MyReader2;
+                MyReader2 = query.ExecuteReader();     // Here our query will be executed and data saved into the database.
+                Console.WriteLine("Save Data");
+                while (MyReader2.Read())
+                {
+                    query.BeginExecuteReader();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+       
+
+        
+      
+
+        
+        static void Main(string[] args)
+        {
+            Database db = new Database();
+            db.Initialize();
+            db.openConnection();
+            db.getData();
+            db.Insert();
+            db.CloseConnection();
+            Console.ReadKey();
+        }
+
+    }
+}
