@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.Threading.Tasks;
+
+namespace Get_data_from_html
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+           List<string> list = new List<string>();
+            WebClient web = new WebClient();
+            String html = web.DownloadString("http://fwreleashed.com/index.php");
+            MatchCollection m1 = Regex.Matches(html,@"<p>\s*(.+?)\s*</p>",RegexOptions.Singleline);
+
+            string p;
+            foreach(Match m in m1)
+            {
+                p = m.Groups[1].Value;
+                Console.WriteLine(p);
+            }
+            Console.ReadLine();
+        }
+    }
+}
