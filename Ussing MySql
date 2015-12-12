@@ -34,6 +34,35 @@ namespace ConsoleApplication2
                 return false;
             }
         }
+         public void selectData()
+        {
+            string querystring2 = "SELECT * FROM ARTICLES;";
+
+            MySqlCommand query = new MySqlCommand(querystring2, connection);
+            try
+            {
+                MySqlDataReader myReader;
+                myReader = query.ExecuteReader();
+                DataTable dtCustomers = new DataTable();
+                dtCustomers.Load(myReader);
+                Console.WriteLine("Rows of the body");
+                foreach(DataRow row in dtCustomers.Rows)
+                {
+                    Console.WriteLine(row["body"].ToString());
+                    Console.WriteLine("-----------------------");
+                    
+                }
+                Console.WriteLine("Rows of the id");
+                foreach (DataRow row in dtCustomers.Rows)
+                {
+                    Console.WriteLine(row["id"].ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
         //Close connection
         public bool CloseConnection()
         {
@@ -100,6 +129,7 @@ namespace ConsoleApplication2
             db.openConnection();
             db.getData();
             db.Insert();
+            db.selectData();
             db.CloseConnection();
             Console.ReadKey();
         }
