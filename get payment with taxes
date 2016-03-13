@@ -1,0 +1,75 @@
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+namespace ProblemSolving
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            //Initializing the object
+            Check payments = new Check();
+
+            //Ussing the method to get the daily payment
+
+            payments.addTaxes(payments.getPayment(DateTime.Now), @"C:\Users\xLuis\Documents\Visual Studio 2015\Projects\ProblemSolving\ProblemSolving\configs.json");
+            //So the program doesnt stops
+            Console.ReadLine();
+        }
+
+        //Get the payment
+        
+    }
+
+    class Check
+    {
+
+        public double getPayment(DateTime startedtime)
+        {
+
+            double time;
+            double.TryParse(Console.ReadLine(), out time);
+
+
+            //get the time when he leaves
+            var endtime = startedtime.AddHours(time);
+            //Time espended
+            var timespended = endtime - startedtime;
+            //Daily payment
+            var dailypayment = timespended.TotalHours * 9;
+
+            //WeeklyPayment
+            double weekypayment = dailypayment * 4;
+            return weekypayment;
+
+        }
+
+        public double addTaxes(double weekypayent, string filepath)
+        {
+            FileStream f = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            StreamReader sr = new StreamReader(f);
+
+
+            dynamic jsonobject = Newtonsoft.Json.JsonConvert.DeserializeObject(sr.ReadToEnd());
+            var tax = jsonobject.Taxes;
+            var alltaxes = tax.NYCityResident + tax.MedicareEmployeeAddlTax + tax.FederalWithholding + tax.SocialSecuriityEmployee + tax.MedicareEmployee + tax.NYWithholding + tax.NYDisabilityEmployee;
+            var pricewithtaxes = weekypayent - alltaxes.Value;
+            Console.WriteLine(pricewithtaxes);
+            return pricewithtaxes;
+
+        }
+
+
+    }
+
+
+
+}
+
